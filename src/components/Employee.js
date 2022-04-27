@@ -17,11 +17,13 @@ import Stack from "@mui/material/Stack";
 import { deepOrange } from "@mui/material/colors";
 import axios from "axios";
 
-function Employee() {
+function Employee({ token }) {
   const [flag, setFlag] = useState(false);
   const deleteEmp = (index) => {
     axios
-      .delete(`http://localhost:3001/api/employ/${index}`)
+      .delete(`http://localhost:3001/api/employ/${index}`, {
+        headers: { "auth-token": token },
+      })
       .then((res) => {
         console.log(res);
         setFlag(!flag);
@@ -88,7 +90,7 @@ function Employee() {
                 </TableCell>
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{row.mobile}</TableCell>
-                {/* <TableCell onClick={()=>deleteEmp(index)}>{"delete"}</TableCell> */}
+
                 <IconButton
                   aria-label="delete"
                   onClick={() => deleteEmp(row._id)}

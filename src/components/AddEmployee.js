@@ -20,7 +20,7 @@ import moment from "moment";
 import { FormGroup } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-function AddEmployee(props) {
+function AddEmployee({ token }) {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const navigate = useNavigate();
   const [cState, setCState] = useState({});
@@ -29,6 +29,7 @@ function AddEmployee(props) {
   const storedData = localStorage.getItem("employee");
   const [newHobby, setNewHobby] = useState("");
   const [validate, setValidate] = useState({});
+
   useEffect(() => {
     axios
       .get("https://www.universal-tutorial.com/api/states/India", {
@@ -73,21 +74,23 @@ function AddEmployee(props) {
       })
       .catch((err) => console.log(err));
   };
-  const h = [];
-  const handleCheckbox = (e, isChecked) => {
-    console.log(isChecked, e.target.value);
-    return isChecked
-      ? setEmployee({
-          ...employee,
-          hobbies: [...employee.hobbies, e.target.value],
-        })
-      : "";
-  };
+
+  // const handleCheckbox = (e, isChecked) => {
+  //   console.log(isChecked, e.target.value);
+  //   return isChecked
+  //     ? setEmployee({
+  //         ...employee,
+  //         hobbies: [...employee.hobbies, e.target.value],
+  //       })
+  //     : "";
+  // };
 
   const addEmployee = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/api/employ/addEmploy", employee)
+      .post("http://localhost:3001/api/employ/addEmploy", employee, {
+        headers: { "auth-token": token },
+      })
       .then((res) => {
         console.log(res);
         navigate("/employee");

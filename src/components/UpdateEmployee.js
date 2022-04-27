@@ -20,7 +20,8 @@ import moment from "moment";
 import { FormGroup } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-function UpdateEmployee(props) {
+
+function UpdateEmployee({ token }) {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const navigate = useNavigate();
   const [cState, setCState] = useState({});
@@ -107,7 +108,9 @@ function UpdateEmployee(props) {
   const editEmployee = (e) => {
     e.preventDefault();
     axios
-      .put(`http://localhost:3001/api/employ/${id}`, employee)
+      .put(`http://localhost:3001/api/employ/${id}`, employee, {
+        headers: { "auth-token": token },
+      })
       .then((res) => {
         console.log(res);
         navigate("/employee");

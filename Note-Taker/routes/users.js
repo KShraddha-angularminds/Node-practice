@@ -51,4 +51,12 @@ router.post("/login", async (req, res) => {
   res.send(token);
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const user = await User.find();
+    res.send(user);
+  } catch (err) {
+    res.send({ message: err });
+  }
+});
 module.exports = router;

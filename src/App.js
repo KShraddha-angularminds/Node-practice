@@ -12,10 +12,13 @@ import {
 import Employee from "./components/Employee";
 import AddEmployee from "./components/AddEmployee";
 import UpdateEmployee from "./components/UpdateEmployee";
+import Register from "./components/Register";
+import Login from "./components/Login";
+
 function App() {
   const data = JSON.parse(localStorage.getItem("employee"));
   const [employeeData, setEmployeeData] = useState(data ? data : []);
- 
+  const token = localStorage.getItem("authToken");
   useEffect(() => {
     localStorage.setItem("employee", JSON.stringify(employeeData));
   }, [employeeData]);
@@ -35,28 +38,15 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Navigate replace to={"/employee"} />} />
-          <Route
-            path="/employee"
-            element={
-              <Employee
-                employeeData={employeeData}
-                deleteRecord={deleteRecord}
-              />
-            }
-          />
-          <Route
-            path="/employee/add"
-            element={<AddEmployee addEmployeeHandler={addEmployeeHandler} />}
-          />
+          <Route path="/" element={<Navigate replace to={"/register"} />} />
+
+          <Route path="/employee" element={<Employee token={token} />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/employee/add" element={<AddEmployee token={token} />} />
           <Route
             path="/employees/update/:id"
-            element={
-              <UpdateEmployee
-                employeeData={employeeData}
-                setEmployeeData={setEmployeeData}
-              />
-            }
+            element={<UpdateEmployee token={token} />}
           />
         </Routes>
       </Router>

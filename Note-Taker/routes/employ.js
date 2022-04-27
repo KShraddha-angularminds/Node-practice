@@ -1,9 +1,9 @@
 const router = require("express").Router();
-
+const verify = require("./verifyToken");
 const Employ = require("../models/employ");
 
 //add employee
-router.post("/addEmploy", async (req, res) => {
+router.post("/addEmploy", verify, async (req, res) => {
   const employee = new Employ({
     name: req.body.name,
     email: req.body.email,
@@ -43,7 +43,7 @@ router.get("/:empId", async (req, res) => {
   }
 });
 
-router.put("/:empId", async (req, res) => {
+router.put("/:empId", verify, async (req, res) => {
   try {
     const updatedEmp = await Employ.updateOne(
       { _id: req.params.empId },
@@ -69,7 +69,7 @@ router.put("/:empId", async (req, res) => {
   }
 });
 
-router.delete("/:empId", async (req, res) => {
+router.delete("/:empId", verify, async (req, res) => {
   try {
     const removeEmp = await Employ.deleteOne({ _id: req.params.empId });
     res.send(removeEmp);
