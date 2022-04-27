@@ -22,74 +22,55 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 function UpdateEmployee(props) {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
-  const { id } = useParams();
   const navigate = useNavigate();
   const [cState, setCState] = useState({});
   const [city, setCity] = useState({});
   const hobby = ["Dancing", "Singing", "Writing", "Crafting"];
-  const storedData = localStorage.getItem("employee");
   const [newHobby, setNewHobby] = useState("");
   const [validate, setValidate] = useState({});
+  const [employee, setEmployee] = useState([]);
+  const { id } = useParams();
+  //console.log(id);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/api/employ/${id}`)
+      .then((res) => {
+        setEmployee(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  //console.log(employee);
   useEffect(() => {
     axios
       .get("https://www.universal-tutorial.com/api/states/India", {
         headers: {
           authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJhc2tAdW5pdmVyc2FsLXR1dG9yaWFsLmNvbSIsImFwaV90b2tlbiI6IlQ2VlBOUmZXbkxFbmdsMHd2djctZ1d2Y09KRHFPSkptc3ZoNkNOdGo5a3p1Z1RSYkhvdXVET1NXeTdzYmJzdG5taDAifSwiZXhwIjoxNjUwMzQyNjc3fQ.rwyx84odejLt5SuVJ9Z0R865PZOOvA-GaV2p2bIGgxs",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJhc2tAdW5pdmVyc2FsLXR1dG9yaWFsLmNvbSIsImFwaV90b2tlbiI6IlQ2VlBOUmZXbkxFbmdsMHd2djctZ1d2Y09KRHFPSkptc3ZoNkNOdGo5a3p1Z1RSYkhvdXVET1NXeTdzYmJzdG5taDAifSwiZXhwIjoxNjUxMDYyMjE5fQ.PPnbznmcN9koqf74kdrrOpZ8X_AuVNoYRWwaIfGzcIU",
         },
       })
       .then((res) => {
         setCState(res.data);
-        console.log(res.data);
+        //    console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
-  const store = JSON.parse(localStorage.getItem("employee"));
 
-  const defaultEmpObject = {
-    name: store[id].name,
-    email: store[id].email,
-    mobile: store[id].mobile,
-    address: store[id].address,
-    state: store[id].state,
-    city: store[id].city,
-    date: store[id].date,
-    gender: store[id].gender,
-    password: store[id].password,
-    hobbies: store[id].hobbies,
-    com_skill: store[id].com_skill,
-  };
-
-  const [employee, setEmployee] = useState(defaultEmpObject);
   const checkboxHandler = () => {
     setEmployee({ ...employee, hobbies: [...employee.hobbies, newHobby] });
     setNewHobby("");
   };
 
   const setStateDistrict = (v) => {
-    console.log(v);
+    // console.log(v);
     setEmployee({ ...employee, state: v });
-    // axios
-    //   .get(`https://www.universal-tutorial.com/api/cities/${v}`, {
-    //     headers: {
-    //       authorization:
-    //         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJhc2tAdW5pdmVyc2FsLXR1dG9yaWFsLmNvbSIsImFwaV90b2tlbiI6IlQ2VlBOUmZXbkxFbmdsMHd2djctZ1d2Y09KRHFPSkptc3ZoNkNOdGo5a3p1Z1RSYkhvdXVET1NXeTdzYmJzdG5taDAifSwiZXhwIjoxNjUwMzQyNjc3fQ.rwyx84odejLt5SuVJ9Z0R865PZOOvA-GaV2p2bIGgxs",
-    //     },
-    //   })
-    //   .then((res) => {
-    //     setCity(res.data);
-    //     console.log(res.data);
-    //   })
-    //   .catch((err) => console.log(err));
   };
   useEffect(() => {
-    console.log(employee.city);
-
     axios
       .get(`https://www.universal-tutorial.com/api/cities/${employee.state}`, {
         headers: {
           authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJhc2tAdW5pdmVyc2FsLXR1dG9yaWFsLmNvbSIsImFwaV90b2tlbiI6IlQ2VlBOUmZXbkxFbmdsMHd2djctZ1d2Y09KRHFPSkptc3ZoNkNOdGo5a3p1Z1RSYkhvdXVET1NXeTdzYmJzdG5taDAifSwiZXhwIjoxNjUwMzQyNjc3fQ.rwyx84odejLt5SuVJ9Z0R865PZOOvA-GaV2p2bIGgxs",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJhc2tAdW5pdmVyc2FsLXR1dG9yaWFsLmNvbSIsImFwaV90b2tlbiI6IlQ2VlBOUmZXbkxFbmdsMHd2djctZ1d2Y09KRHFPSkptc3ZoNkNOdGo5a3p1Z1RSYkhvdXVET1NXeTdzYmJzdG5taDAifSwiZXhwIjoxNjUxMDYyMjE5fQ.PPnbznmcN9koqf74kdrrOpZ8X_AuVNoYRWwaIfGzcIU",
         },
       })
       .then((res) => {
@@ -124,21 +105,16 @@ function UpdateEmployee(props) {
   };
 
   const editEmployee = (e) => {
-    console.log("dfkjkfdhksfdk");
     e.preventDefault();
-    if (validateData()) {
-      console.log(store);
-      console.log(employee);
-      const x = store.filter(function (v, item) {
-        return item != id;
+    axios
+      .put(`http://localhost:3001/api/employ/${id}`, employee)
+      .then((res) => {
+        console.log(res);
+        navigate("/employee");
+      })
+      .catch((err) => {
+        console.log(err);
       });
-
-      x.push(employee);
-      props.setEmployeeData(x);
-      alert("Record updated Successfully");
-      navigate("/employee");
-    } else {
-    }
   };
   let flag = false;
   const validateData = () => {
@@ -168,216 +144,205 @@ function UpdateEmployee(props) {
     return y;
   };
 
-  console.log(cState[0]);
+  console.log(employee);
   return (
     <div>
       <br />
       <br />
-      {props.employeeData?.map((val, index) => {
-        return id == index ? (
-          <>
-            <Box
-              style={{ display: "flex", justifyContent: "center" }}
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                "& > :not(style)": {
-                  m: 1,
-                  width: 528,
-                  height: 980,
 
-                  display: "center",
-                },
-              }}
+      <Box
+        style={{ display: "flex", justifyContent: "center" }}
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          "& > :not(style)": {
+            m: 1,
+            width: 528,
+            height: 980,
+
+            display: "center",
+          },
+        }}
+      >
+        <form onSubmit={(e) => editEmployee(e)}>
+          <Paper elevation={3}>
+            <h2>
+              <center>
+                <font color="black">Edit Employee Details</font>
+              </center>
+            </h2>
+
+            <Grid
+              container
+              direction={"row"}
+              spacing={4}
+              style={{ padding: "30px" }}
             >
-              <form onSubmit={(e) => editEmployee(e)}>
-                <Paper elevation={3}>
-                  <h2>
-                    <center>
-                      <font color="black">Edit Employee Details</font>
-                    </center>
-                  </h2>
+              <Grid item>
+                <TextField
+                  error={!employee.name ? true : false}
+                  id={!employee.name ? `outlines-error` : `outlined-basic`}
+                  id="outlined-basic"
+                  label="Name"
+                  variant="outlined"
+                  value={employee.name}
+                  name="name"
+                  helperText={!employee.name ? "please enter name" : ""}
+                  onChange={(e) =>
+                    setEmployee({ ...employee, name: e.target.value })
+                  }
+                  required
+                />
+                <TextField
+                  error={!employee.email ? true : false}
+                  id={!employee.email ? `outlines-error` : `outlined-basic`}
+                  id="outlined-basic"
+                  label="Email"
+                  variant="outlined"
+                  value={employee.email}
+                  name="email"
+                  onChange={(e) =>
+                    setEmployee({ ...employee, email: e.target.value })
+                  }
+                  autoComplete="email"
+                  helperText={!employee.email ? "please enter email" : ""}
+                  style={{ width: 220, marginLeft: "12px" }}
+                  required
+                />
+              </Grid>
 
-                  <Grid
-                    container
-                    direction={"row"}
-                    spacing={4}
-                    style={{ padding: "30px" }}
+              <Grid item>
+                <TextField
+                  id="outlined-basic"
+                  label="Mobile"
+                  value={employee.mobile}
+                  name="mobile"
+                  onChange={(e) =>
+                    setEmployee({ ...employee, mobile: e.target.value })
+                  }
+                  variant="outlined"
+                />
+                <TextareaAutosize
+                  aria-label="empty textarea"
+                  minRows={3}
+                  placeholder={"Address"}
+                  value={employee.address}
+                  name="address"
+                  onChange={(e) =>
+                    setEmployee({ ...employee, address: e.target.value })
+                  }
+                  style={{ width: 220, marginLeft: "12px" }}
+                />
+              </Grid>
+              <div>
+                <span style={{ color: "red", marginLeft: "30px" }}>
+                  {validate.mobile}
+                </span>
+              </div>
+              <Grid item xs={12}>
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={cState}
+                  getOptionLabel={(cState) => cState.state_name}
+                  renderInput={(params) => (
+                    <TextField {...params} label="States" variant="outlined" />
+                  )}
+                  value={getState()}
+                  // value={cState[0]}
+                  onChange={(event, value) =>
+                    setStateDistrict(value.state_name)
+                  }
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Autocomplete
+                  disablePortal
+                  id="combo-box"
+                  options={city}
+                  getOptionLabel={(city) => city.city_name}
+                  renderInput={(params) => (
+                    <TextField {...params} label="City" variant="outlined" />
+                  )}
+                  onChange={(event, value) =>
+                    setEmployee({ ...employee, city: value.city_name })
+                  }
+                  value={getCity()}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    label="Date"
+                    value={employee.date}
+                    onChange={(newValue) => {
+                      setEmployee({
+                        ...employee,
+                        date: moment(newValue).format("DD-MM-YYYY"),
+                      });
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} fullWidth />
+                    )}
+                  />
+                </LocalizationProvider>
+                <Grid />
+                <br />
+                <Grid item>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Gender
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    onChange={(e) =>
+                      setEmployee({ ...employee, gender: e.target.value })
+                    }
+                    value={employee.gender}
                   >
-                    <Grid item>
-                      <TextField
-                        error={!employee.name ? true : false}
-                        id={
-                          !employee.name ? `outlines-error` : `outlined-basic`
-                        }
-                        id="outlined-basic"
-                        label="Name"
-                        variant="outlined"
-                        value={employee.name}
-                        name="name"
-                        helperText={!employee.name ? "please enter name" : ""}
-                        onChange={(e) =>
-                          setEmployee({ ...employee, name: e.target.value })
-                        }
-                        required
-                      />
-                      <TextField
-                        error={!employee.email ? true : false}
-                        id={
-                          !employee.email ? `outlines-error` : `outlined-basic`
-                        }
-                        id="outlined-basic"
-                        label="Email"
-                        variant="outlined"
-                        value={employee.email}
-                        name="email"
-                        onChange={(e) =>
-                          setEmployee({ ...employee, email: e.target.value })
-                        }
-                        autoComplete="email"
-                        helperText={!employee.email ? "please enter email" : ""}
-                        style={{ width: 220, marginLeft: "12px" }}
-                        required
-                      />
-                    </Grid>
+                    <FormControlLabel
+                      value="Female"
+                      control={<Radio />}
+                      label="Female"
+                      checked={employee.gender === "Female"}
+                    />
+                    <FormControlLabel
+                      value="Male"
+                      control={<Radio />}
+                      label="Male"
+                      checked={employee.gender === "Male"}
+                    />
+                    <FormControlLabel
+                      value="Other"
+                      control={<Radio />}
+                      label="Other"
+                      checked={employee.gender === "Other"}
+                    />
+                  </RadioGroup>
+                </Grid>
 
-                    <Grid item>
-                      <TextField
-                        id="outlined-basic"
-                        label="Mobile"
-                        value={employee.mobile}
-                        name="mobile"
-                        onChange={(e) =>
-                          setEmployee({ ...employee, mobile: e.target.value })
-                        }
-                        variant="outlined"
-                      />
-                      <TextareaAutosize
-                        aria-label="empty textarea"
-                        minRows={3}
-                        placeholder={"Address"}
-                        value={employee.address}
-                        name="address"
-                        onChange={(e) =>
-                          setEmployee({ ...employee, address: e.target.value })
-                        }
-                        style={{ width: 220, marginLeft: "12px" }}
-                      />
-                    </Grid>
-                    <div>
-                      <span style={{ color: "red", marginLeft: "30px" }}>
-                        {validate.mobile}
-                      </span>
-                    </div>
-                    <Grid item xs={12}>
-                      <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        options={cState}
-                        getOptionLabel={(cState) => cState.state_name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="States"
-                            variant="outlined"
-                          />
-                        )}
-                        value={getState()}
-                        // value={cState[0]}
-                        onChange={(event, value) =>
-                          setStateDistrict(value.state_name)
-                        }
-                      />
-                    </Grid>
+                <Grid item>
+                  <TextField
+                    id="outlined-basic"
+                    label="Password"
+                    value={employee.password}
+                    onChange={(e) =>
+                      setEmployee({
+                        ...employee,
+                        password: e.target.value,
+                      })
+                    }
+                    variant="outlined"
+                    style={{ marginBottom: "20px" }}
+                    required
+                  />
+                </Grid>
 
-                    <Grid item xs={12}>
-                      <Autocomplete
-                        disablePortal
-                        id="combo-box"
-                        options={city}
-                        getOptionLabel={(city) => city.city_name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="City"
-                            variant="outlined"
-                          />
-                        )}
-                        onChange={(event, value) =>
-                          setEmployee({ ...employee, city: value.city_name })
-                        }
-                        value={getCity()}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                          label="Date"
-                          value={employee.date}
-                          onChange={(newValue) => {
-                            setEmployee({
-                              ...employee,
-                              date: moment(newValue).format("DD-MM-YYYY"),
-                            });
-                          }}
-                          renderInput={(params) => (
-                            <TextField {...params} fullWidth />
-                          )}
-                        />
-                      </LocalizationProvider>
-                      <Grid />
-                      <br />
-                      <Grid item>
-                        <FormLabel id="demo-row-radio-buttons-group-label">
-                          Gender
-                        </FormLabel>
-                        <RadioGroup
-                          row
-                          aria-labelledby="demo-row-radio-buttons-group-label"
-                          name="row-radio-buttons-group"
-                          onChange={(e) =>
-                            setEmployee({ ...employee, gender: e.target.value })
-                          }
-                          value={employee.gender}
-                        >
-                          <FormControlLabel
-                            value="female"
-                            control={<Radio />}
-                            label="Female"
-                          />
-                          <FormControlLabel
-                            value="male"
-                            control={<Radio />}
-                            label="Male"
-                          />
-                          <FormControlLabel
-                            value="other"
-                            control={<Radio />}
-                            label="Other"
-                          />
-                        </RadioGroup>
-                      </Grid>
-
-                      <Grid item>
-                        <TextField
-                          id="outlined-basic"
-                          label="Password"
-                          value={employee.password}
-                          onChange={(e) =>
-                            setEmployee({
-                              ...employee,
-                              password: e.target.value,
-                            })
-                          }
-                          variant="outlined"
-                          style={{ marginBottom: "20px" }}
-                          required
-                        />
-                      </Grid>
-
-                      <Grid item>
-                        {/* <FormLabel id="demo-row-radio-buttons-group-label">Hobbies</FormLabel><br></br>
+                <Grid item>
+                  {/* <FormLabel id="demo-row-radio-buttons-group-label">Hobbies</FormLabel><br></br>
              {hobby.map((v,index)=>{
           return (
             <>
@@ -392,77 +357,72 @@ function UpdateEmployee(props) {
              })}
               */}
 
-                        <TextField
-                          id="outlined-basic"
-                          label="Hobbies"
-                          variant="outlined"
-                          value={newHobby}
-                          onChange={(e) => setNewHobby(e.target.value)}
+                  <TextField
+                    id="outlined-basic"
+                    label="Hobbies"
+                    variant="outlined"
+                    value={newHobby}
+                    onChange={(e) => setNewHobby(e.target.value)}
+                  />
+                  <Button
+                    variant="contained"
+                    style={{ marginLeft: "20px" }}
+                    onClick={checkboxHandler}
+                  >
+                    Add Hobby
+                  </Button>
+
+                  <FormGroup>
+                    {employee.hobbies?.map((hobby, j) => {
+                      return (
+                        <FormControlLabel
+                          key={j}
+                          control={<Checkbox />}
+                          value={hobby}
+                          label={hobby}
+                          checked={true}
+                          onClick={checkboxClickHandler}
                         />
-                        <Button
-                          variant="contained"
-                          style={{ marginLeft: "20px" }}
-                          onClick={checkboxHandler}
-                        >
-                          Add Hobby
-                        </Button>
+                      );
+                    })}
+                  </FormGroup>
+                </Grid>
 
-                        <FormGroup>
-                          {employee.hobbies.map((hobby, j) => {
-                            return (
-                              <FormControlLabel
-                                key={j}
-                                control={<Checkbox />}
-                                value={hobby}
-                                label={hobby}
-                                checked={true}
-                                onClick={checkboxClickHandler}
-                              />
-                            );
-                          })}
-                        </FormGroup>
-                      </Grid>
-
-                      <Grid item>
-                        <Box width={230}>
-                          <FormLabel id="demo-row-radio-buttons-group-label">
-                            Communication Skills
-                          </FormLabel>
-                          <Slider
-                            aria-label="Default"
-                            value={employee.com_skill}
-                            onChange={(e) =>
-                              setEmployee({
-                                ...employee,
-                                com_skill: e.target.value,
-                              })
-                            }
-                            valueLabelDisplay="auto"
-                            max={5}
-                          />
-                        </Box>
-                      </Grid>
-                      <br />
-                      <Grid item xs={13} align="center">
-                        <Button
-                          variant="contained"
-                          //onClick={editEmployee}
-                          style={{ width: "400px" }}
-                          type="submit"
-                        >
-                          Edit
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Paper>
-              </form>
-            </Box>
-          </>
-        ) : (
-          ""
-        );
-      })}
+                <Grid item>
+                  <Box width={230}>
+                    <FormLabel id="demo-row-radio-buttons-group-label">
+                      Communication Skills
+                    </FormLabel>
+                    <Slider
+                      aria-label="Default"
+                      value={parseInt(employee.com_skill)}
+                      onChange={(e) =>
+                        setEmployee({
+                          ...employee,
+                          com_skill: e.target.value,
+                        })
+                      }
+                      valueLabelDisplay="auto"
+                      max={5}
+                    />
+                  </Box>
+                </Grid>
+                <br />
+                <Grid item xs={13} align="center">
+                  <Button
+                    variant="contained"
+                    onClick={editEmployee}
+                    style={{ width: "400px" }}
+                    type="submit"
+                  >
+                    Edit
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Paper>
+        </form>
+      </Box>
     </div>
   );
 }

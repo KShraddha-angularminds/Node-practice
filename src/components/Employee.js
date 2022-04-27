@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -9,18 +9,40 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-// import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteIcon from "@material-ui/icons//Delete";
 import EditIcon from "@material-ui/icons//Edit";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import { deepOrange } from "@mui/material/colors";
+import axios from "axios";
 
-function Employee({ employeeData, deleteRecord }) {
+function Employee() {
+  const [flag, setFlag] = useState(false);
   const deleteEmp = (index) => {
-    deleteRecord(index);
+    axios
+      .delete(`http://localhost:3001/api/employ/${index}`)
+      .then((res) => {
+        console.log(res);
+        setFlag(!flag);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
+  const [employeeData, setEmployeeData] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/employ")
+      .then((res) => {
+        console.log(res);
+        setEmployeeData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [flag]);
   console.log(employeeData);
   return (
     <div style={{ marginTop: "50px" }}>
@@ -69,11 +91,11 @@ function Employee({ employeeData, deleteRecord }) {
                 {/* <TableCell onClick={()=>deleteEmp(index)}>{"delete"}</TableCell> */}
                 <IconButton
                   aria-label="delete"
-                  onClick={() => deleteEmp(index)}
+                  onClick={() => deleteEmp(row._id)}
                 >
                   <DeleteIcon />
                 </IconButton>
-                <Link to={`/employees/update/${index}`}>
+                <Link to={`/employees/update/${row._id}`}>
                   <IconButton aria-label="edit">
                     <EditIcon />
                   </IconButton>{" "}

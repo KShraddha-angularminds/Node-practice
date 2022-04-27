@@ -34,7 +34,7 @@ function AddEmployee(props) {
       .get("https://www.universal-tutorial.com/api/states/India", {
         headers: {
           authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJhc2tAdW5pdmVyc2FsLXR1dG9yaWFsLmNvbSIsImFwaV90b2tlbiI6IlQ2VlBOUmZXbkxFbmdsMHd2djctZ1d2Y09KRHFPSkptc3ZoNkNOdGo5a3p1Z1RSYkhvdXVET1NXeTdzYmJzdG5taDAifSwiZXhwIjoxNjUwMzQyNjc3fQ.rwyx84odejLt5SuVJ9Z0R865PZOOvA-GaV2p2bIGgxs",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJhc2tAdW5pdmVyc2FsLXR1dG9yaWFsLmNvbSIsImFwaV90b2tlbiI6IlQ2VlBOUmZXbkxFbmdsMHd2djctZ1d2Y09KRHFPSkptc3ZoNkNOdGo5a3p1Z1RSYkhvdXVET1NXeTdzYmJzdG5taDAifSwiZXhwIjoxNjUxMDYyMjE5fQ.PPnbznmcN9koqf74kdrrOpZ8X_AuVNoYRWwaIfGzcIU",
         },
       })
       .then((res) => {
@@ -64,7 +64,7 @@ function AddEmployee(props) {
       .get(`https://www.universal-tutorial.com/api/cities/${v}`, {
         headers: {
           authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJhc2tAdW5pdmVyc2FsLXR1dG9yaWFsLmNvbSIsImFwaV90b2tlbiI6IlQ2VlBOUmZXbkxFbmdsMHd2djctZ1d2Y09KRHFPSkptc3ZoNkNOdGo5a3p1Z1RSYkhvdXVET1NXeTdzYmJzdG5taDAifSwiZXhwIjoxNjUwMzQyNjc3fQ.rwyx84odejLt5SuVJ9Z0R865PZOOvA-GaV2p2bIGgxs",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJhc2tAdW5pdmVyc2FsLXR1dG9yaWFsLmNvbSIsImFwaV90b2tlbiI6IlQ2VlBOUmZXbkxFbmdsMHd2djctZ1d2Y09KRHFPSkptc3ZoNkNOdGo5a3p1Z1RSYkhvdXVET1NXeTdzYmJzdG5taDAifSwiZXhwIjoxNjUxMDYyMjE5fQ.PPnbznmcN9koqf74kdrrOpZ8X_AuVNoYRWwaIfGzcIU",
         },
       })
       .then((res) => {
@@ -86,13 +86,15 @@ function AddEmployee(props) {
 
   const addEmployee = (e) => {
     e.preventDefault();
-    if (validateData()) {
-      props.addEmployeeHandler(employee);
-      setEmployee(defaultEmpObject);
-      alert("Record Added Successfully");
-      navigate("/employee");
-    } else {
-    }
+    axios
+      .post("http://localhost:3001/api/employ/addEmploy", employee)
+      .then((res) => {
+        console.log(res);
+        navigate("/employee");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const checkboxHandler = () => {
@@ -283,17 +285,17 @@ function AddEmployee(props) {
                   }
                 >
                   <FormControlLabel
-                    value="female"
+                    value="Female"
                     control={<Radio />}
                     label="Female"
                   />
                   <FormControlLabel
-                    value="male"
+                    value="Male"
                     control={<Radio />}
                     label="Male"
                   />
                   <FormControlLabel
-                    value="other"
+                    value="Other"
                     control={<Radio />}
                     label="Other"
                   />
